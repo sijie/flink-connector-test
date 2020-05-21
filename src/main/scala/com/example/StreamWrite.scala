@@ -9,9 +9,12 @@ import org.apache.flink.streaming.connectors.pulsar.{FlinkPulsarSink, TopicKeyEx
 object StreamWrite {
   def main(args: Array[String]): Unit = {
 
+    val webServiceUrl = "http://localhost:8080"
+    val brokerServiceUrl = "pulsar://localhost:6650"
+
     val prop = new Properties()
-    prop.setProperty("service.url", "pulsar://localhost:6650")
-    prop.setProperty("admin.url", "http://localhost:8080")
+    prop.setProperty("service.url", brokerServiceUrl)
+    prop.setProperty("admin.url", webServiceUrl)
     prop.setProperty("topic", args(0))
 
     val env = StreamExecutionEnvironment.getExecutionEnvironment
@@ -26,10 +29,15 @@ object StreamWrite {
       NasaMission(4, "Skylab", 1973, 1974) ::
       NasaMission(5, "Apollo–Soyuz Test Project", 1975, 1975) :: Nil)
 
-    ds.addSink(new FlinkPulsarSink[NasaMission](prop, new TopicKeyExtractor[NasaMission] {
-      override def serializeKey(element: NasaMission): Array[Byte] = null
-      override def getTopic(element: NasaMission): String = null
-    }))
+    ds.addSink(new FlinkPulsarSink[NasaMission](
+      brokerServiceUrl,
+      webServiceUrl,
+      java.util.Optional.of(args(0)),
+      prop,
+      new TopicKeyExtractor[NasaMission] {
+        override def serializeKey(element: NasaMission): Array[Byte] = null
+        override def getTopic(element: NasaMission): String = null
+      }, NasaMission.getClass.asInstanceOf))
 
     env.execute("Flink write NASA data to pulsar.")
   }
