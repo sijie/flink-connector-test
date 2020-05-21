@@ -14,8 +14,8 @@
     <encoding>UTF-8</encoding>
     <scala.version>2.11.12</scala.version>
     <scala.compat.version>2.11</scala.compat.version>
-    <flink.version>1.9.0</flink.version>
-    <pulsar-flink-connector.version>2.4.0</pulsar-flink-connector.version>
+    <flink.version>1.10.1</flink.version>
+    <pulsar-flink-connector.version>2.4.8</pulsar-flink-connector.version>
     <maven-shade-plugin.version>3.1.0</maven-shade-plugin.version>
   </properties>
 
@@ -81,6 +81,7 @@
           <skipTests>true</skipTests>
         </configuration>
       </plugin>
+      <!--
       <plugin>
         <groupId>org.scalatest</groupId>
         <artifactId>scalatest-maven-plugin</artifactId>
@@ -89,7 +90,6 @@
           <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
           <junitxml>.</junitxml>
           <filereports>TestSuiteReport.txt</filereports>
-          <!-- Comma separated list of JUnit test class names to execute -->
           <jUnitClasses>samples.AppTest</jUnitClasses>
         </configuration>
         <executions>
@@ -101,6 +101,7 @@
           </execution>
         </executions>
       </plugin>
+      -->
       <plugin>
         <!-- Shade all the dependencies to avoid conflicts -->
         <groupId>org.apache.maven.plugins</groupId>
